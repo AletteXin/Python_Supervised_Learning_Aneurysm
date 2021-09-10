@@ -3,7 +3,7 @@
 Supervised Learning Aneurysm is a research project to develop an artificial intelligence model to predict the risk of a patient towards Abdominal Aortic Aneurysm ("AAA") using easily measured health indicators and lifestyle metrics. 
 
 
-# Parameters of project
+## Parameters of the project
 
 More than 300 patients were contacted for participation in the retrospective data collection process. 129 of these patients were willing to be interviewed. 
 
@@ -33,6 +33,6 @@ The model was trained to predict the output of the size of the abdominal aorta:
 3. Large (>5.2cm)
 
 
-# Evolution of thought process
+## Evolution of thought process
 
 The starting code includes a reference to this article (https://www.kaggle.com/prashant111/random-forest-classifier-tutorial) in the creation of a standard RandomForest model. 
