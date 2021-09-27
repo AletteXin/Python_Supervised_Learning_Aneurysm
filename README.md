@@ -2,7 +2,7 @@
 
 ## Overview 
 
-Supervised Learning Aneurysm is a research project to develop an supervised learning artificial intelligence model to predict the risk of a patient towards Abdominal Aortic Aneurysm ("AAA") using easily measured health indicators and lifestyle metrics. The code is written in Python. 
+Supervised Learning Aneurysm is a research project to develop a supervised learning artificial intelligence model to predict the risk of a patient towards Abdominal Aortic Aneurysm ("AAA") using easily measured health indicators and lifestyle metrics. The code is written in Python. 
 
 
 ## Parameters of the project
