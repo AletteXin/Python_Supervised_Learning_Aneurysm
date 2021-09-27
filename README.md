@@ -49,7 +49,7 @@ Code
 
 Data collection 
 1. Numerical data generally produced a higher feature score compared to categorical data. As a result, additional numerical features were included, such as Years_of_hypertension and No_cigs.
-2. Some data sets had missing values for certain features. An imperative imputer was used to provide best-guessed dummy numbers. A correlation analysis was conducted betweeen the feature and other features. The feature with the highest correlation was used to inform the dummy number used. 
+2. Some data sets had missing values for certain features. An imperative imputer was used to provide best-guessed dummy numbers. A correlation analysis was conducted betweeen the missing feature and other features. The feature with the highest correlation was used to inform the dummy number used. 
 
 Feature selection 
 1. Possible subset of features were analysed in a methodical way to understand which combination led to the highest accuracy. 
