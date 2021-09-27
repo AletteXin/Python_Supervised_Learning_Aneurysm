@@ -43,7 +43,7 @@ The starting code includes a reference to this article (https://www.kaggle.com/p
 
 Code
 1. The data was stratified into 4 sets, and the average accuracy was calculated. 
-2. The number of "Normal", "Small" and "Large" data cases was made equal in both the test and train sets. For the test sets, additional datapoints were fed into the train set. For the train sets, the data was randomly oversampled to meet an equal distribution.
+2. The number of "Normal", "Small" and "Large" data cases was made equal in both the test and train sets. For the test sets, additional datapoints above the minimum were removed from the test set and fed into the train set. For the train sets, the data was randomly oversampled to reach an equal distribution.
 3. GridCV Search was used to inform the parameters of the RandomForestClassifier that will lead to the highest accuracy. 
 
 
