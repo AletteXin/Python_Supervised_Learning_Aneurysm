@@ -433,46 +433,104 @@ def print_set(set):
     else:
       others += 1
   total = large + small + normal + others
-  result = [large, normal, small, others, total]
+  result = [large, small, normal, others, total]
 
   return result 
 
+def print_acc_recall(accuracy_arr, recall_arr):
+
+  print("ACCURACY")
+  print(accuracy_arr)
+
+  average_acc = sum(accuracy_arr) / len(accuracy_arr)
+  print("AVERAGE ACCURACY: " + str(average_acc))
+
+  print("-------------------------------------------")
+  print("RECALL")
+  print(recall_arr)
+
+  large_recall = []
+  small_recall = []
+  normal_recall = []
 
 
-# Choose data to be included in the train and test 
+  for array in recall_arr:
+    large_recall.append(array[0])
+    small_recall.append(array[1])
+    normal_recall.append(array[2])
 
-X = rl.drop(['Hospital', 'Row', 'Name', 'Category_AAA', 'AAA_copy','Size_of_aorta', 'Years_of_HPT_encode', 'Cig_per_day_encode',
+  average_large_recall =  sum(large_recall)/ len(recall_arr)
+  average_small_recall = sum(small_recall)/len(recall_arr)
+  average_normal_recall = sum(normal_recall) / len(recall_arr)
+
+  print("AVERAGE LARGE RECALL: " + str(average_large_recall))
+  print("AVERAGE SMALL RECALL: " + str(average_small_recall))
+  print("AVERAGE NORMAL RECALL: " + str(average_normal_recall))
+
+
+  def print_disease(set):
+  disease = 0
+  normal = 0
+  others = 0
+
+  for value in set:
+    if value == 'Disease':
+      disease += 1
+    elif value == "Normal":
+      normal += 1
+    else:
+      others += 1
+  total = disease + normal + others
+  result = [disease, normal, others, total]
+
+  return result 
+
+# FINAL CODE 
+# FIRST LAYER - SVC (SMOTE)
+# SECOND LAYER - SVC (RandomOversampler)
+
+title = "FIRST LAYER: SVC (SMOTE); SECOND LAYER: SVC (RandomOversampler)"
+
+X = rl.drop(['Hospital', 'Row', 'Name', 'Category_AAA', 'AAA_copy','Size_of_aorta', 'Disease',
+             'Heart_disease', 'Family_history_AAA', 'Lung_disease', 
+             'Stroke', 'Renal_impairment', 'Dialysis', 'Diabetes', 
+             'Ex_smoker','Years_of_HPT', 'Hypertension', 'Years_of_hypertension', 'Underlying_condition'
+
              ], axis = 1)
 
-y = rl['Category_AAA']
-
+y = rl['Disease']
 
 # Full dataset (including null values)
-skf = StratifiedKFold(n_splits=4, shuffle=True, random_state=30)
+skf = StratifiedKFold(n_splits=4, shuffle=True, random_state=10)
 
 # # Partial dataset (excluding null values)
 # skf = StratifiedKFold(n_splits=4, shuffle=True, random_state=1)
 accuracy_arr = []
+recall_arr = []
+first_acc_arr = []
+first_recall_arr = [] 
 
 for train_index, test_index in skf.split(X, y):
+
   X_train, X_test = X.iloc[train_index], X.iloc[test_index]
   y_train, y_test = y.iloc[train_index], y.iloc[test_index]
 
+
+  # REBALANCE TRAINING AND TEST SETS 
+
   print("-----------")
   print("INITIAL TRAIN SET")
-  print("large: " + str(print_set(y_train)[0]))
-  print("normal: " + str(print_set(y_train)[1]))
-  print("small: " + str(print_set(y_train)[2]))
-  print("others: " + str(print_set(y_train)[3]))
-  print("total: " + str(print_set(y_train)[4]))
+  print("disease: " + str(print_disease(y_train)[0]))
+  print("normal: " + str(print_disease(y_train)[1]))
+  print("others: " + str(print_disease(y_train)[2]))
+  print("total: " + str(print_disease(y_train)[3]))
 
   print("-----------")
   print("INITIAL TEST SET")
-  print("large: " + str(print_set(y_test)[0]))
-  print("normal: " + str(print_set(y_test)[1]))
-  print("small: " + str(print_set(y_test)[2]))
-  print("others: " + str(print_set(y_test)[3]))
-  print("total: " + str(print_set(y_test)[4]))
+  print("disease: " + str(print_disease(y_test)[0]))
+  print("normal: " + str(print_disease(y_test)[1]))
+  print("others: " + str(print_disease(y_test)[2]))
+  print("total: " + str(print_disease(y_test)[3]))
 
   incomplete_data = []
 
@@ -503,44 +561,35 @@ for train_index, test_index in skf.split(X, y):
 
 
   print("-----------")
-  print("REVISED TEST SET REMOVING INCOMPLETE DATA")
-  print("large: " + str(print_set(y_test)[0]))
-  print("normal: " + str(print_set(y_test)[1]))
-  print("small: " + str(print_set(y_test)[2]))
-  print("others: " + str(print_set(y_test)[3]))
-  print("total: " + str(print_set(y_test)[4]))
+  print("INITIAL TRAIN SET")
+  print("disease: " + str(print_disease(y_train)[0]))
+  print("normal: " + str(print_disease(y_train)[1]))
+  print("others: " + str(print_disease(y_train)[2]))
+  print("total: " + str(print_disease(y_train)[3]))
 
   print("-----------")
-  print("REVISED TRAIN SET ADDING INCOMPLETE DATA")
-  print("large: " + str(print_set(y_train)[0]))
-  print("normal: " + str(print_set(y_train)[1]))
-  print("small: " + str(print_set(y_train)[2]))
-  print("others: " + str(print_set(y_train)[3]))
-  print("total: " + str(print_set(y_train)[4]))
+  print("INITIAL TEST SET")
+  print("disease: " + str(print_disease(y_test)[0]))
+  print("normal: " + str(print_disease(y_test)[1]))
+  print("others: " + str(print_disease(y_test)[2]))
+  print("total: " + str(print_disease(y_test)[3]))
 
-  min_test_set = min(print_set(y_test)[0], print_set(y_test)[1], print_set(y_test)[2])
+  min_test_set = min(print_disease(y_test)[0], print_disease(y_test)[1])
 
-  large_test = 0
-  small_test = 0
+  disease_test = 0
   normal_test = 0
   others_test = 0
 
   shift_data = []
 
   for key, value in y_test.items():
-    if value == 'Large':
-      if large_test < min_test_set:
-        large_test += 1
+    if value == 'Disease':
+      if disease_test < min_test_set:
+        disease_test += 1
       else: 
         shift_data.append(key)
 
-    elif value == "Small":
-      if small_test < min_test_set:
-        small_test += 1
-      else: 
-        shift_data.append(key)
-
-    elif value == "Normal":
+    elif value == 'Normal':
       if normal_test < min_test_set:
         normal_test += 1
       else: 
@@ -564,103 +613,170 @@ for train_index, test_index in skf.split(X, y):
 
   print("-----------")
   print("REBALANCED TEST SET")
-  print("large: " + str(print_set(y_test)[0]))
-  print("normal: " + str(print_set(y_test)[1]))
-  print("small: " + str(print_set(y_test)[2]))
-  print("others: " + str(print_set(y_test)[3]))
-  print("total: " + str(print_set(y_test)[4]))
+  print("disease: " + str(print_disease(y_test)[0]))
+  print("normal: " + str(print_disease(y_test)[1]))
+  print("others: " + str(print_disease(y_test)[2]))
+  print("total: " + str(print_disease(y_test)[3]))
 
 
   print("-----------")
   print("REBALANCED TRAIN SET")
-  print("large: " + str(print_set(y_train)[0]))
-  print("normal: " + str(print_set(y_train)[1]))
-  print("small: " + str(print_set(y_train)[2]))
-  print("others: " + str(print_set(y_train)[3]))
-  print("total: " + str(print_set(y_train)[4]))
+  print("disease: " + str(print_disease(y_train)[0]))
+  print("normal: " + str(print_disease(y_train)[1]))
+  print("others: " + str(print_disease(y_train)[2]))
+  print("total: " + str(print_disease(y_train)[3]))
 
 
   X_test = X_test.drop(['Complete_dataset'], axis = 1)
   X_train = X_train.drop(['Complete_dataset'], axis = 1)
 
-  print("-----------")
-  print("X_TEST")
-  print(X_test)
+  # # FIRST LAYER: DISEASE OR NORMAL 
+  
+  # first_y = rl['Disease']
+
+  # # Extracting data for y_test set 
+
+  # data_to_drop_first_set_test = []
+
+  # for key, value in y_train.items():
+  #   data_to_drop_first_set_test.append(key)
+
+  # y_test = first_y.drop(data_to_drop_first_set_test)
+
+
+  # # Extrcting data for y_train set 
+
+  # data_to_drop_first_set_train = []
+
+  # for key, value in y_test.items():
+  #   data_to_drop_first_set_train.append(key)
+
+  # y_train = first_y.drop(data_to_drop_first_set_train)
+
+
+
+  # print("-----------")
+  # print("FIRST LAYER TRAIN SET")
+  # print("disease: " + str(print_disease(y_train)[0]))
+  # print("normal: " + str(print_disease(y_train)[1]))
+  # print("others: " + str(print_disease(y_train)[2]))
+  # print("total: " + str(print_disease(y_train)[3]))
+
+  # print("-----------")
+  # print("FIRST LAYER TEST SET")
+  # print("disease: " + str(print_disease(y_test)[0]))
+  # print("normal: " + str(print_disease(y_test)[1]))
+  # print("others: " + str(print_disease(y_test)[2]))
+  # print("total: " + str(print_disease(y_test)[3]))
+
+
+  # print("-----------")
+  # print("X_TEST")
+  # print(X_test)
+
+  # print("-----------")
+  # print("Y_TEST")
+  # print(y_test)
+
+  # # OPTION 1 FOR OVERSAMPLE: RANDOM OVER SAMPLER
+
+  # from imblearn.over_sampling import RandomOverSampler
+  # ros = RandomOverSampler(random_state=0)
+  # X_resampled, y_resampled = ros.fit_resample(X_train, y_train)
+
+  # OPTION 2 FOR OVERSAMPLE: SMOTE
+  from imblearn.over_sampling import SMOTE, ADASYN
+  X_resampled, y_resampled = SMOTE(random_state = 30).fit_resample(X_train, y_train)
+
+
+  # # OPTION 3 FOR OVERSAMPLE: ADASYN 
+  # from imblearn.over_sampling import SMOTE, ADASYN
+  # X_resampled, y_resampled = ADASYN(random_state = 0).fit_resample(X_train, y_train)
 
   print("-----------")
-  print("Y_TEST")
-  print(y_test)
-
-  from imblearn.over_sampling import RandomOverSampler
-
-  ros = RandomOverSampler(random_state=0)
-  X_resampled, y_resampled = ros.fit_resample(X_train, y_train)
-
+  print("RESAMPLED FIRST LAYER TRAIN SET")
+  print("disease: " + str(print_disease(y_resampled)[0]))
+  print("normal: " + str(print_disease(y_resampled)[1]))
+  print("others: " + str(print_disease(y_resampled)[2]))
+  print("total: " + str(print_disease(y_resampled)[3]))
 
   print("-----------")
-  print("RESAMPLED TRAIN SET")
-  print("large: " + str(print_set(y_resampled)[0]))
-  print("normal: " + str(print_set(y_resampled)[1]))
-  print("small: " + str(print_set(y_resampled)[2]))
-  print("others: " + str(print_set(y_resampled)[3]))
-  print("total: " + str(print_set(y_resampled)[4]))
+  print("RESAMPLED FIRST LAYER TRAIN SET SHAPE")
+  print(X_resampled.shape)
 
+
+# Features included in second_X_test
+
+  features_first_layer = []
+
+  for key, value in X_test.items():
+    features_first_layer.append(key)
+
+
+  print("FIRST LAYER FEATURES")
+  print(features_first_layer)
 
 
 # # OPTION 1: RANDOMFOREST CLASSIFIER 
-  # from sklearn.ensemble import RandomForestClassifier
+#   from sklearn.ensemble import RandomForestClassifier
 
-# # Partial dataset
-#   clf = RandomForestClassifier(n_estimators=600, min_samples_split=2, min_samples_leaf=6, 
-#                                max_features=2, max_depth=30, bootstrap='True', 
-#                                random_state=20, max_leaf_nodes=4)
+# # # Partial dataset
+# #   clf = RandomForestClassifier(n_estimators=600, min_samples_split=2, min_samples_leaf=6, 
+# #                                max_features=2, max_depth=30, bootstrap='True', 
+# #                                random_state=20, max_leaf_nodes=4)
   
-# Full dataset
-  # clf = RandomForestClassifier(n_estimators=100, min_samples_split=2, min_samples_leaf=2, 
-  #                              max_features=2, max_depth=30, bootstrap='True', 
-  #                              random_state=20, max_leaf_nodes=4)
+# # Full dataset
+#   clf = RandomForestClassifier(n_estimators=1000, min_samples_split=2, min_samples_leaf=4, 
+#                                max_features=4, max_depth=20, bootstrap='True', 
+#                                random_state=20, max_leaf_nodes=2)
 
 
 # OPTION 2: SVC
 
-  from sklearn.pipeline import make_pipeline
-  from sklearn.preprocessing import StandardScaler
   from sklearn.svm import SVC
 
-  clf = make_pipeline(StandardScaler(), SVC(gamma='auto', probability=True, random_state = 2))                        
+  clf = SVC(probability=True, random_state = 2, degree=3, kernel="linear")               
   
 
 # # OPTION 3: ADABOOST 
 
 #   from sklearn.ensemble import AdaBoostClassifier
 
-#   clf = AdaBoostClassifier(random_state=1, n_estimators=10, learning_rate=1)  
+#   clf = AdaBoostClassifier(random_state=1, n_estimators=100, learning_rate=1)         
+
 
 # # OPTION 4: MULTI-LAYER PERCEPTION 
 
 #   from sklearn.neural_network import MLPClassifier
 
-#   clf = MLPClassifier(solver='lbfgs', alpha=1.1,
-#                       hidden_layer_sizes=(10, 1), random_state=1)
-
+#   clf = MLPClassifier(solver='lbfgs', alpha=5.0,
+#                       hidden_layer_sizes=(14, 14), random_state=1)
+  
+  
   clf.fit(X_resampled, y_resampled)
   y_pred = clf.predict(X_test)
   accuracy = accuracy_score(y_test, y_pred)
+  recall = recall_score(y_test, y_pred, pos_label="Disease")
 
   print("-----------")
-  print("y_pred")
+  print("FIRST LAYER PREDICTION")
   print(y_pred)
+
+  print("-----------")
+  print("FIRST LAYER GROUND TRUTH")
+  print(y_test)
 
   proba = clf.predict_proba(X_test)
 
-  print("-----------")
-  print("Predict proba: ")
-  print(proba)
+  # print("-----------")
+  # print("Predict proba: ")
+  # print(proba)
   
   print("-----------")
-  print('Model accuracy score : {0:0.4f}'. format(accuracy))
+  print('Model accuracy score for first layer : {0:0.4f}'. format(accuracy))
 
-  accuracy_arr.append(accuracy)
+  first_acc_arr.append(accuracy)
+  first_recall_arr.append(recall)
 
   cm = plot_confusion_matrix(clf, X_test, y_test)
 
@@ -671,11 +787,258 @@ for train_index, test_index in skf.split(X, y):
 
   print(classification_report(y_test, y_pred))
 
+  # PREDICT BETWEEN SMALL AND LARGE 
+  second_round_disease_test = []
+  second_round_normal_test = []
+  second_round_others_test = []
 
-print(accuracy_arr)
+  disease_index = []
+  normal_index = []
 
-average_acc = sum(accuracy_arr) / len(accuracy_arr)
+  # Extracting keys which require second layer (i.e. predicted disease in first layer)
+
+  for index, value in enumerate(y_pred):
+    if value == 'Disease':
+      disease_index.append(index)
+    
+    else: 
+      normal_index.append(index)
+
+  counter = 0
+  
+  for key, value in y_test.items():
+    if counter in disease_index:
+      second_round_disease_test.append(key)
+      counter += 1 
+      continue
+    
+    else:
+      second_round_normal_test.append(key)
+      counter += 1
+      continue
+    
+  # Redefining the feature selection to predict between small and large 
+
+  second_X = rl.drop(['Hospital', 'Row', 'Name', 'Category_AAA', 'AAA_copy','Size_of_aorta', 'Disease', 'Complete_dataset',
+                      'Ex_smoker', 'Dyslipidemia', 'Heart_disease', 'Dialysis', 
+                      'Lung_disease', 'Stroke', 'Family_history_AAA',  'Age',
+                      'Gender', 'Cig_per_day', 'No_cigs','Smoker', 
+                      'Years_of_smoking', 'Renal_impairment', 'Underlying_condition'
+                      ], axis = 1)
+
+  second_y = rl['Category_AAA']
+
+  second_X_test = second_X
+
+  second_y_test = second_y
+
+  # To prepare the testing sets for second layer 
+
+  for key, value in second_y_test.items():
+    if key in second_round_disease_test:
+      continue
+    else:
+      second_y_test = second_y_test.drop(key)
+      second_X_test = second_X_test.drop(key)
+      continue
+
+  # To prepare the training sets for second layer 
+
+  second_keys = []
+  drop_from_full_set = []
+
+  for key, value in y_train.items():
+    second_keys.append(key)
+
+  second_y_train = second_y
+
+  for key, value in second_y_train.items():
+    if key in second_keys:
+      if value == 'Normal':
+        drop_from_full_set.append(key)
+        second_y_train = second_y_train.drop(key)
+      else:
+        continue
+    else:
+      drop_from_full_set.append(key)
+      second_y_train = second_y_train.drop(key)
+      continue
+
+
+  second_X_train = second_X.drop(drop_from_full_set)
+
+
+  print("-----------")
+  print("SECOND LAYER TRAIN SET")
+  print("large: " + str(print_set(second_y_train)[0]))
+  print("small: " + str(print_set(second_y_train)[1]))
+  print("normal: " + str(print_set(second_y_train)[2]))
+  print("others: " + str(print_set(second_y_train)[3]))
+  print("total: " + str(print_set(second_y_train)[4]))
+
+
+  # OPTION 1 FOR OVERSAMPLE: RANDOM OVER SAMPLER
+
+  from imblearn.over_sampling import RandomOverSampler
+  ros = RandomOverSampler(random_state=0)
+  second_X_resampled, second_y_resampled = ros.fit_resample(second_X_train, second_y_train)
+
+  # # OPTION 2 FOR OVERSAMPLE: SMOTE
+  # from imblearn.over_sampling import SMOTE, ADASYN
+  # second_X_resampled, second_y_resampled = SMOTE(random_state = 0).fit_resample(second_X_train, second_y_train)
+
+
+  # # OPTION 3 FOR OVERSAMPLE: ADASYN 
+  # from imblearn.over_sampling import SMOTE, ADASYN
+  # second_X_resampled, second_y_resampled = ADASYN(random_state = 10).fit_resample(second_X_train, second_y_train)
+
+  print("-----------")
+  print("RESAMPLED SECOND LAYER TRAIN SET")
+  print("large: " + str(print_set(second_y_resampled)[0]))
+  print("small: " + str(print_set(second_y_resampled)[1]))
+  print("normal: " + str(print_set(second_y_resampled)[2]))
+  print("others: " + str(print_set(second_y_resampled)[3]))
+  print("total: " + str(print_set(second_y_resampled)[4]))
+
+
+# Features included in second_X_test
+
+  features_second_layer = []
+
+  for key, value in second_X_test.items():
+    features_second_layer.append(key)
+
+
+  print("SECOND LAYER FEATURES")
+  print(features_second_layer)
+
+
+# # OPTION 1: RANDOMFOREST CLASSIFIER 
+#   from sklearn.ensemble import RandomForestClassifier
+
+# # # Partial dataset
+# #   clf = RandomForestClassifier(n_estimators=600, min_samples_split=2, min_samples_leaf=6, 
+# #                                max_features=2, max_depth=30, bootstrap='True', 
+# #                                random_state=20, max_leaf_nodes=4)
+  
+# # Full dataset
+#   clf = RandomForestClassifier(n_estimators=1000, min_samples_split=2, min_samples_leaf=4, 
+#                                max_features=4, max_depth=20, bootstrap='True', 
+#                                random_state=20, max_leaf_nodes=2)
+
+
+# OPTION 2: SVC
+
+  from sklearn.svm import SVC
+
+  clf = SVC(probability=True, random_state = 2, degree=3, kernel="linear")      
+
+# # OPTION 3: ADABOOST
+
+#   from sklearn.ensemble import AdaBoostClassifier
+
+#   clf = AdaBoostClassifier(random_state=1, n_estimators=100, learning_rate=1)    
+
+  clf.fit(second_X_resampled, second_y_resampled)
+  second_y_pred = clf.predict(second_X_test)
+  accuracy = accuracy_score(second_y_test, second_y_pred)
+
+  print("-----------")
+  print('Model accuracy score for second layer: {0:0.4f}'. format(accuracy))
+
+  cm = plot_confusion_matrix(clf, second_X_test, second_y_test)
+
+  print("-----------")
+  print('CONFUSION MATRIX\n\n', cm)
+
+  from sklearn.metrics import classification_report
+
+  print(classification_report(second_y_test, second_y_pred))
+
+
+  # To-do: Merge both datasets and come up with the final accuracy 
+
+  print("SECOND LAYER PREDICTION")
+  print(second_y_pred)
+
+  print("SECOND LAYER GROUND TRUTH")
+  print(second_y_test)
+
+  counter = 0 
+
+  for index, value in enumerate(y_pred):
+    if value == 'Disease':
+      y_pred[index] = second_y_pred[counter]
+      counter += 1
+  
+  detailed_y_test_keys = []
+  
+  for key, value in y_test.items():
+    detailed_y_test_keys.append(key)
+
+  detailed_y_test = rl['Category_AAA']
+
+  for key, value in detailed_y_test.items():
+    if key in detailed_y_test_keys:
+      continue
+    else:
+      detailed_y_test = detailed_y_test.drop(key)
+  
+  print("GROUND TRUTH")
+  print(detailed_y_test)
+  print("COMPLETE PREDICTION FROM FIRST AND SECOND LAYER")
+  print(y_pred)
+
+  accuracy = accuracy_score(detailed_y_test, y_pred)
+  recall = recall_score(detailed_y_test, y_pred, labels=["Large", "Small", "Normal"], average = None)
+  
+  print("-----------")
+  print('Model accuracy score for complete prediction: {0:0.4f}'. format(accuracy))
+
+  accuracy_arr.append(accuracy)
+  recall_arr.append(recall)
+
+  # cm = plot_confusion_matrix(clf,X_test, detailed_y_test, labels=["Large", "Small", "Normal"])
+
+  print("-----------")
+  print('CONFUSION MATRIX\n\n', cm)
+
+  from sklearn.metrics import classification_report
+
+  print(classification_report(detailed_y_test, y_pred, labels=["Large", "Small", "Normal"]))
+
+
+# FINAL CODE 
+print(title)
+print("First layer features")
+print(features_first_layer)
+print("Second layer features")
+print(features_second_layer)
+print("                          ")
+print("++++++++++++++++++++++++++++++")
+print("                          ")
+
+print("LAYER 1 ONLY")
+print("-------------------------------")
+print("Accuracy")
+print(first_acc_arr)
+average_acc = sum(first_acc_arr) / len(first_acc_arr)
 print("AVERAGE ACCURACY: " + str(average_acc))
+
+print("-------------------------------")
+
+print("Recall")
+print(first_recall_arr)
+recall_acc = sum(first_recall_arr) / len(first_recall_arr)
+print("AVERAGE DISEASE RECALL: " + str(average_acc))
+
+
+print("                          ")
+print("++++++++++++++++++++++++++++++")
+print("                          ")
+print("COMPLETE - LAYER 1 AND LAYER 2")
+print("-------------------------------")
+print_acc_recall(accuracy_arr, recall_arr)
 
 
 # OPTIONAL: Getting best params for SVC/RandomForest
