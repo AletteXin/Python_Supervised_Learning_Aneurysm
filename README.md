@@ -7,7 +7,7 @@ A supervised learning artificial intelligence model to predict a patient's risk 
 
 ## Data processing
 
-The dataset used contains the electronic health records of 142 patients (due to patient confidentiality reasons, the dataset is not provided in the code). These patients were selected based on availability of data on the size of their abdominal aorta, either from ultrasound scans or CT scans. The patients were interviewed to understand their smoking habits and other underlying chronic conditions. The list of features to be considered was finalised after consultation with a doctor who has experience in treating patients with the disease. 
+The dataset used contains the electronic health records of 142 patients (due to patient confidentiality reasons, the dataset is not provided in the code). These patients were selected based on availability of data on the size of their abdominal aorta, either from ultrasound scans or CT scans. The patients were interviewed to understand their smoking habits and other underlying chronic conditions. The comprehensive list of features to be considered was finalised after consultation with a doctor who has experience in treating patients with the disease. The final feature selection was compiled based on combinations which produced the highest accuracy score. 
 
 The features considered in the study include:
 ![Screenshot 2021-10-22 at 11 13 48 AM](https://user-images.githubusercontent.com/85789376/138387538-18e279ef-aa63-43bb-964b-4e4aa8a9b257.png)
