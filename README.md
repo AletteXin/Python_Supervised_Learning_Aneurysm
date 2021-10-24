@@ -5,7 +5,7 @@
 A supervised learning artificial intelligence model to predict a patient's risk towards Abdominal Aortic Aneurysm ("AAA") using electronic health records. The code is written in Python. 
 
 
-## Parameters of the project
+## Data processing
 
 The dataset contains the electronic health records of 142 patients. These patients were selected based on availability of data on the size of their abdominal aorta, either from ultrasound scans or CT scans. The patients were interviewed to understand their smoking habits and other underlying chronic conditions. The list of features to be considered was finalised after consultation with a doctor who has experience in treating patients with the disease. 
 
