@@ -17,11 +17,11 @@ The model was trained to predict the size of a patients' abdominal aorta:
 2. Small (2.4 - 5.4cm) - low risk of rupture 
 3. Large (>5.4cm) - high risk of rupture 
 
-Three classifiers were considered throughout the project: RandomForest, SVC and Adaboost. 
+Three classifiers were considered throughout the project: RandomForest, SVM and Adaboost. 
 
 ## Structure of final model 
 
-The final model is a 2-step SVC classifier. The dataset was exact steps of the model are depicted in the following figure: 
+The final model is a 2-step SVM classifier. The dataset was exact steps of the model are depicted in the following figure: 
 
 ![Screenshot 2021-10-22 at 11 15 50 AM](https://user-images.githubusercontent.com/85789376/138387709-462d1490-0117-4fd3-add6-3eb697f54d21.png)
 
