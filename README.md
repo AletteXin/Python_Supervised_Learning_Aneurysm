@@ -13,8 +13,8 @@ The features considered in the study include:
 ![Screenshot 2021-10-22 at 11 13 48 AM](https://user-images.githubusercontent.com/85789376/138387538-18e279ef-aa63-43bb-964b-4e4aa8a9b257.png)
 
 The model was trained to predict the size of a patients' abdominal aorta:
-1. Normal (<2.4cm) - extremely low risk of rupture
-2. Small (2.4 - 5.4cm) - low risk of rupture 
+1. Normal (<2.4cm) - low risk of rupture
+2. Small (2.4 - 5.4cm) - medium risk of rupture 
 3. Large (>5.4cm) - high risk of rupture 
 
 Three classifiers were considered throughout the project: RandomForest, SVM and Adaboost. 
