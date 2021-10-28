@@ -2,7 +2,7 @@
 
 ## Overview 
 
-A supervised learning artificial intelligence model to predict the risk of a patient towards Abdominal Aortic Aneurysm ("AAA") using electronic health records. The code is written in Python. 
+A supervised learning artificial intelligence model that predicts a patient's risk of an abdominal aortic aneurysm ("AAA") rupture using electronic health records. The code is written in Python. 
 
 
 ## Data processing
