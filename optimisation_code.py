@@ -17,9 +17,6 @@ arr = [
              'Underlying_condition', 'Dyslipidemia', 'Age', 'Gender', 'SBP', 'DBP'
              ]
 
-
-
-
 start = 0
 end = start + 1
 
